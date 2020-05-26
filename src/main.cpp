@@ -1,29 +1,52 @@
-
-#include <opencv2/core/core.hpp>
 #include <vector>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 #include <string>
-#include <stdio.h>
-#include <stdlib.h>
+#include <dirent.h>
+
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 #include "ReceiptCropper.h"
 
 using namespace cv;
 using namespace std;
 
-const string src = "/home/nils/eclipse-cpp-ws/receipt-cropper/darkbg.jpg";
+const char* TEST_DIR = "./test-in/";
+const string OUT_DIR = "./test-out/";
+
 
 int main(int numArgs, char** args )
 {
-	Mat input = imread(src);
-	ReceiptCropper *cropper = new ReceiptCropper(&input);
-	Mat* cropped = cropper->getCropped();
-	imwrite("result.jpg", *cropped);
+	// the root for all the debugging images
+	//string debugRoot = debugDir;
 
+	if (auto dir = opendir(TEST_DIR))
+	{
+	    while (auto file = readdir(dir))
+	    {
+	        if (!file->d_name || file->d_name[0] == '.')
+	        {
+	        	// Skip everything that starts with a dot
+	        	continue;
+	        }
+
+	        cout << "processing " << file->d_name << endl;
+	        Mat input = imread(string(TEST_DIR) + string(file->d_name));
+
+	        ReceiptCropper* cropper = new ReceiptCropper(&input);
+	        Mat* output = cropper->getCropped();
+
+	        string fileName(file->d_name);
+	        imwrite(OUT_DIR + fileName, *output);
+
+	        delete cropper;
+	    }
+	    closedir(dir);
+	}
 
 	return 0;
 }
+
 

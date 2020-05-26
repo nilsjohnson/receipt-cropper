@@ -45,10 +45,10 @@ bool ReceiptCropper::hasBrightEdges(Mat *mat) {
 	Mat right(*mat, rect2);
 
 	if (DEBUG) {
-		imwrite(PICTURE_DIR + "left.jpg", left);
+		imwrite(DEBUG_OUT_DIR + "left.jpg", left);
 	}
 	if (DEBUG) {
-		imwrite(PICTURE_DIR + "right.jpg", right);
+		imwrite(DEBUG_OUT_DIR + "right.jpg", right);
 	}
 
 	Mat edges[] = { left, right };
@@ -56,7 +56,7 @@ bool ReceiptCropper::hasBrightEdges(Mat *mat) {
 	Mat left_right_joined;
 	hconcat(edges, 2, left_right_joined);
 	if (DEBUG) {
-		imwrite(PICTURE_DIR + "lr_join.jpg", left_right_joined);
+		imwrite(DEBUG_OUT_DIR + "lr_join.jpg", left_right_joined);
 	}
 
 	Mat hsv;
@@ -67,9 +67,7 @@ bool ReceiptCropper::hasBrightEdges(Mat *mat) {
 	left.release();
 	right.release();
 
-	cout << "Brightness: " << result[2] << endl;
 	if (result[2] > BRIGHT) {
-		cout << "This image is bright!" << endl;
 		hsv.release();
 		return true;
 	}
@@ -81,19 +79,19 @@ void ReceiptCropper::crop(Mat *image, bool brightEdges) {
 	int threshVal = brightEdges ? THRESH_BRIGHT : THRESH_NORMAL;
 
 	if (DEBUG) {
-		imwrite(PICTURE_DIR + "original.jpg", *image);
+		imwrite(DEBUG_OUT_DIR + "original.jpg", *image);
 	}
 	// "threshold" image to find receipt corners and do rotation.
 	Mat *thresh = new Mat(image->rows, image->cols, CV_8UC1);
 
 	cvtColor(*image, *thresh, COLOR_BGR2GRAY);
 	if (DEBUG) {
-		imwrite(PICTURE_DIR + "gray.jpg", *thresh);
+		imwrite(DEBUG_OUT_DIR + "gray.jpg", *thresh);
 	}
 	//Threshold the gray
 	threshold(*thresh, *thresh, threshVal, 255, THRESH_BINARY);
 	if (DEBUG) {
-		imwrite(PICTURE_DIR + "threshold.jpg", *thresh);
+		imwrite(DEBUG_OUT_DIR + "threshold.jpg", *thresh);
 	}
 
 	// Find the largest contour
@@ -117,12 +115,12 @@ void ReceiptCropper::crop(Mat *image, bool brightEdges) {
 	// get the transition matrix to apply the rotation
 	Mat transationMat = getRotationMatrix2D(rotatedRect.center, angle, 1);
 	if (DEBUG) {
-		imwrite(PICTURE_DIR + "transition_matrix.jpg", *thresh);
+		imwrite(DEBUG_OUT_DIR + "transition_matrix.jpg", *thresh);
 	}
 
 	warpAffine(*image, *image, transationMat, image->size(), INTER_CUBIC);
 	if (DEBUG) {
-		imwrite(PICTURE_DIR + "affine.jpg", *image);
+		imwrite(DEBUG_OUT_DIR + "affine.jpg", *image);
 	}
 
 	// Convert to gray and threshold
@@ -134,7 +132,7 @@ void ReceiptCropper::crop(Mat *image, bool brightEdges) {
 	bounding_rect = boundingRect(contours[0]);
 	*image = Mat(*image, bounding_rect);
 	if (DEBUG) {
-		imwrite(PICTURE_DIR + "result.jpg", *image);
+		imwrite(DEBUG_OUT_DIR + "result.jpg", *image);
 	}
 
 	this->cropped = image;
@@ -155,6 +153,6 @@ Mat* ReceiptCropper::getCropped() {
 }
 
 ReceiptCropper::~ReceiptCropper() {
-	// all cleanup happened in crop
+	// cleanup happens in crop
 }
 

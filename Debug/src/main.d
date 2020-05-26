@@ -29,10 +29,7 @@ src/main.o: ../src/main.cpp \
  /usr/local/include/opencv4/opencv2/core/cvdef.h \
  /usr/local/include/opencv4/opencv2/imgproc/imgproc.hpp \
  /usr/local/include/opencv4/opencv2/imgproc.hpp \
- /usr/local/include/opencv4/opencv2/imgcodecs.hpp \
- /usr/local/include/opencv4/opencv2/highgui/highgui.hpp \
- /usr/local/include/opencv4/opencv2/highgui.hpp \
- /usr/local/include/opencv4/opencv2/videoio.hpp ../src/ReceiptCropper.h
+ /usr/local/include/opencv4/opencv2/imgcodecs.hpp ../src/ReceiptCropper.h
 
 /usr/local/include/opencv4/opencv2/core/core.hpp:
 
@@ -95,11 +92,5 @@ src/main.o: ../src/main.cpp \
 /usr/local/include/opencv4/opencv2/imgproc.hpp:
 
 /usr/local/include/opencv4/opencv2/imgcodecs.hpp:
-
-/usr/local/include/opencv4/opencv2/highgui/highgui.hpp:
-
-/usr/local/include/opencv4/opencv2/highgui.hpp:
-
-/usr/local/include/opencv4/opencv2/videoio.hpp:
 
 ../src/ReceiptCropper.h:

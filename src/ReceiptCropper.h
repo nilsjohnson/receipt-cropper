@@ -13,9 +13,12 @@ using namespace cv;
 #ifndef RECEIPTCROPPER_H_
 #define RECEIPTCROPPER_H_
 
+
 // if DEBUG, you may print images for each step of the way.
-const string PICTURE_DIR = "/home/nils/eclipse-cpp-ws/receipt-cropper/out/";
-const bool DEBUG = true;
+
+const string DEBUG_OUT_DIR = "/home/nils/eclipse-cpp-ws/receipt-cropper/out/";
+const bool DEBUG = false;
+
 
 class ReceiptCropper {
 private:
